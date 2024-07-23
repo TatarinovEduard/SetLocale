@@ -14,21 +14,31 @@ public enum Country {
     DE("DE", "de_DE"),
     AZ("AZ", "az_AZ"),
     QA("QA", "en_US");
-    /**
-     * Двухбуквенный код страны
-     */
-    private final String code;
-    /**
-     * Локаль по умолчанию (значение согласно IETF BCP 47, должно быть понятно методу {@link java.util.Locale#forLanguageTag(String)})
-     */
-    private final String locale;
 
     private static final Map<String, Country> mapByCode = Arrays.stream(values())
             .collect(Collectors.toMap(Country::getCode, Function.identity()));
 
+    /**
+     * Двухбуквенный код страны
+     */
+    private final String code;
+
+    /**
+     * Локаль по умолчанию (значение согласно IETF BCP 47, должно быть понятно методу
+     * {@link java.util.Locale#forLanguageTag(String)})
+     */
+    private final String locale;
+
     Country(String code, String locale) {
         this.code = code;
         this.locale = locale;
+    }
+
+    public static Country getByCode(String country, Country defaultCountry) {
+        if (country == null) {
+            return defaultCountry;
+        }
+        return mapByCode.getOrDefault(country, defaultCountry);
     }
 
     public String getCode() {
@@ -37,12 +47,5 @@ public enum Country {
 
     public String getLocale() {
         return locale;
-    }
-
-    public static Country getByCode(String country, Country defaultCountry) {
-        if (country == null) {
-            return defaultCountry;
-        }
-        return mapByCode.getOrDefault(country, defaultCountry);
     }
 }
